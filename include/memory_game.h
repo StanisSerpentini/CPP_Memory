@@ -1,0 +1,62 @@
+#ifndef MEMORY_GAME_H_
+    #define MEMORY_GAME_H_
+    #include <ftxui/dom/elements.hpp>
+    #include <random>
+
+
+mg::MemoryGame init_board();
+
+namespace mg {
+
+struct Tile {
+    size_t value;
+    bool isMatched;
+    bool isFlipped;
+};
+
+using Board = std::vector<std::vector<Tile>>;
+
+class MemoryGame {
+public:
+    MemoryGame(uint size) {
+        if (size == 0)
+            throw std::invalid_argument{"invalid size"};
+        if (size % 2 != 0)
+            throw std::invalid_argument{"board must be even to form pairs"};
+
+        size_t area = size * size;
+        std::vector<size_t> memory_list(area);
+        for (size_t i = 0; i < area; i++)
+            memory_list[i] = i / 2 + 1;
+
+        static std::mt19937 engine(std::random_device{}());
+        std::shuffle(memory_list.begin(), memory_list.end(), engine);
+
+        size_t index = 0;
+        for (uint i = 0; i < size; i++) {
+            Board::value_type row;
+            for (uint j = 0; j < size; j++) {
+                row.push_back(Tile{ memory_list[index++], false, false });
+            }
+            board.push_back(row);
+        }
+    }
+
+    const Board &getBoard() { return board; }
+
+    bool isSolved() {
+        for (const auto& row : board) {
+            for (const auto& tile : row) {
+                if (!tile.isMatched)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+private:
+  Board board{};
+};
+} // namespace mg
+
+#endif
