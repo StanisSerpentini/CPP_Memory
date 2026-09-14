@@ -73,9 +73,15 @@ private:
 
 
 // Initialization:
+
 mg::MemoryGame init_board();
 
 // Game loop:
+
 void runGame();
+
+// Help:
+
+void printHelp();
 
 #endif
