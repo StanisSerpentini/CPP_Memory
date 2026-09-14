@@ -1,7 +1,8 @@
 NAME := CPP_Memory
 
 SRC :=	main.cpp	\
-		init_game.cpp
+		init_game.cpp	\
+		main_loop.cpp
 
 CXX := g++
 
