@@ -1,10 +1,8 @@
 #include <memory_game.h>
 #include <fmt/core.h>
-#include <ftxui/dom/elements.hpp>
 #include <iostream>
 
 using namespace std;
-using namespace ftxui;
 
 using fmt::println, fmt::print;
 
@@ -21,7 +19,7 @@ uint get_board_size() {
         } catch (const invalid_argument & e) {
             println("Wrong argument. Please enter an even number.");
             continue;
-        } catch (const std::out_of_range & e) {
+        } catch (const out_of_range & e) {
             println("Number too large. Please enter a smaller number.");
             continue;
         }
