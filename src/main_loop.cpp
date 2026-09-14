@@ -1,5 +1,6 @@
 #include <memory_game.h>
 #include <ftxui/ftxui.hpp>
+#include <utility>
 
 ftxui::Element createElementBoard(const mg::Board &board) {
     using namespace std;
@@ -36,7 +37,6 @@ ftxui::Element createElementBoard(const mg::Board &board) {
 }
 
 void runGame(uint size) {
-    using namespace std;
     using namespace ftxui;
 
     mg::MemoryGame board{size};
