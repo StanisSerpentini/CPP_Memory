@@ -1,6 +1,7 @@
 NAME := CPP_Memory
 
-SRC := main.cpp
+SRC :=	main.cpp	\
+		init_game.cpp
 
 CXX := g++
 
