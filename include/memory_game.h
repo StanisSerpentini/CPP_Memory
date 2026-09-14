@@ -74,11 +74,12 @@ private:
 
 // Initialization:
 
-mg::MemoryGame init_board();
+bool is_valid_size(std::string &s);
+uint get_board_size();
 
 // Game loop:
 
-void runGame();
+void runGame(uint size);
 
 // Help:
 

@@ -1,10 +1,28 @@
-#include <memory_game.h>
 #include <fmt/core.h>
 #include <iostream>
 
 using namespace std;
 
 using fmt::println, fmt::print;
+
+bool is_valid_size(string &s) {
+    uint size;
+
+    try {
+        size = stoi(s);
+    } catch (const invalid_argument & e) {
+        println("Wrong argument. Please enter an even number.");
+        return false;
+    } catch (const out_of_range & e) {
+        println("Number too large. Please enter a smaller number.");
+        return false;
+    }
+    if (!(size % 2 == 0 && size < 9)) {
+        println("Please enter an even number smaller than 10.");
+        return false;
+    }
+    return true;
+}
 
 uint get_board_size() {
     uint size;
@@ -14,25 +32,10 @@ uint get_board_size() {
     println("Enter the this of the board:");
     while (!good_size) {
         getline(cin, linebuff);
-        try {
+        if (is_valid_size(linebuff)) {
             size = stoi(linebuff);
-        } catch (const invalid_argument & e) {
-            println("Wrong argument. Please enter an even number.");
-            continue;
-        } catch (const out_of_range & e) {
-            println("Number too large. Please enter a smaller number.");
-            continue;
+            good_size = true;
         }
-        good_size = (size % 2 == 0 && size < 9) ? true : false;
-        if (!good_size)
-            println("Please enter an even number smaller than 10.");
     }
     return size;
-}
-
-mg::MemoryGame init_board() {
-    uint board_size = get_board_size();
-    mg::MemoryGame board{board_size};
-
-    return board;
 }

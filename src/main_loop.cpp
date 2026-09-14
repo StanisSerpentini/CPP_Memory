@@ -35,11 +35,11 @@ ftxui::Element createElementBoard(const mg::Board &board) {
     return make_board(board);
 }
 
-void runGame() {
+void runGame(uint size) {
     using namespace std;
     using namespace ftxui;
 
-    auto board = init_board();
+    mg::MemoryGame board{size};
     auto screen = ScreenInteractive::Fullscreen();
     auto renderer = Renderer([&] {
         return createElementBoard(board.getBoard());
