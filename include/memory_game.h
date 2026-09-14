@@ -71,6 +71,11 @@ private:
 };
 } // namespace mg
 
+
+// Initialization:
 mg::MemoryGame init_board();
+
+// Game loop:
+void runGame();
 
 #endif
