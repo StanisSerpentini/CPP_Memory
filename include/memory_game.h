@@ -44,6 +44,21 @@ public:
 
     const Board &getBoard() { return board; }
 
+    const Tile &getTile(uint x, uint y) { return board.at(x).at(y); }
+
+    void flipTile(uint x, uint y) {
+        board.at(x).at(y).isFlipped = !board.at(x).at(y).isFlipped;
+    }
+
+    bool matchTiles(uint x1, uint y1, uint x2, uint y2) {
+        if (board.at(x1).at(y1).value == board.at(x2).at(y2).value) {
+            board.at(x1).at(y1).isMatched = true;
+            board.at(x2).at(y2).isMatched = true;
+            return true;
+        }
+        return false;
+    }
+
     bool isSolved() {
         for (const auto& row : board) {
             for (const auto& tile : row) {
