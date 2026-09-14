@@ -3,9 +3,6 @@
     #include <ftxui/dom/elements.hpp>
     #include <random>
 
-
-mg::MemoryGame init_board();
-
 namespace mg {
 
 struct Tile {
@@ -73,5 +70,7 @@ private:
   Board board{};
 };
 } // namespace mg
+
+mg::MemoryGame init_board();
 
 #endif
