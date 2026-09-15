@@ -44,7 +44,8 @@ public:
     const Tile &getTile(uint x, uint y) { return board.at(x).at(y); }
 
     void flipTile(uint x, uint y) {
-        board.at(x).at(y).isFlipped = !board.at(x).at(y).isFlipped;
+        if (!board.at(x).at(y).isMatched)
+            board.at(x).at(y).isFlipped = !board.at(x).at(y).isFlipped;
     }
 
     bool matchTiles(uint x1, uint y1, uint x2, uint y2) {

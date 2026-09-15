@@ -13,8 +13,9 @@ ftxui::Element createElementBoard(const mg::Board &board) {
                             | center
                             | border
                             | size(WIDTH, EQUAL, 9)
-                            | size(HEIGHT, EQUAL, 5)
-                            | color(Color::Blue);
+                            | size(HEIGHT, EQUAL, 5);
+        
+        element_tile |= tile.isMatched ? color(Color::Green):color(Color::Blue);
         return element_tile;
     };
     auto make_row = [&](const Board::value_type &values) {
