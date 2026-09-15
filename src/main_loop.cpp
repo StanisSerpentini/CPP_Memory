@@ -16,7 +16,7 @@ ftxui::Element createElementBoard
                             | size(HEIGHT, EQUAL, 5);
         
         if (tile.coords.x == cursor.x && tile.coords.y == cursor.y)
-            element_tile |= tile.isMatched ? color(Color::Green1):color(Color::Blue1);
+            element_tile |= tile.isMatched ? color(Color::Magenta):color(Color::Purple);
         else
             element_tile |= tile.isMatched ? color(Color::Green):color(Color::Blue);
         return element_tile;
