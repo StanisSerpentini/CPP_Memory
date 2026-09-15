@@ -2,7 +2,7 @@
 #include <ftxui/ftxui.hpp>
 
 ftxui::Element createElementBoard
-(const mg::Board &board, mg::Coords &cursor) {
+(const mg::Board &board, const mg::Coords &cursor) {
     using namespace std;
     using namespace mg;
     using namespace ftxui;
@@ -40,82 +40,27 @@ ftxui::Element createElementBoard
     return make_board(board);
 }
 
-int getSelectAction
-(mg::MemoryGame &game, mg::Coords &cursor, bool &has_selected) {
-    auto tile = game.getBoard()[cursor.x][cursor.y];
-
-    if (tile.isMatched || tile.isFlipped)
-        return 0;
-    if (has_selected == false) {
-        has_selected = true;
-        return 1;
-    } else {
-        has_selected = false;
-        return 2;
-    }
-}
-
 void runGame(uint size) {
     using namespace ftxui;
     using namespace mg;
 
     MemoryGame game{size};
-    Coords cursor{0, 0};
-    Coords selected{0, 0};
-    Coords tmp{0, 0};
-    bool has_selected = false;
-    bool wait = false;
     auto screen = ScreenInteractive::Fullscreen();
     auto renderer = Renderer([&] {
-        return createElementBoard(game.getBoard(), cursor);
+        return createElementBoard(game.getBoard(), game.getCursor());
     });
 
-    auto process_cursor_control = [&](Event event) {
-        if (event == Event::Character('z')) {
-            cursor.x -= 1;
-            cursor.x %= size;
-        }
-        if (event == Event::Character('s')) {
-            cursor.x += 1;
-            cursor.x %= size;
-        }
-        if (event == Event::Character('q')) {
-            cursor.y -= 1;
-            cursor.y %= size;
-        }
-        if (event == Event::Character('d')) {
-            cursor.y += 1;
-            cursor.y %= size;
-        }
-    };
-
-    auto process_selection = [&](Event event) {
-        if (event == Event::Character(' ')) {
-            switch (getSelectAction(game, cursor, has_selected)) {
-                case 1:
-                    selected = cursor;
-                    game.flipTile(selected);
-                    break;
-                case 2:
-                    game.flipTile(cursor);
-                    if (!game.matchTiles(selected, cursor)) {
-                        tmp = cursor;
-                        wait = true;
-                    }
-                default:
-                    break;
-            }
-        }
-    };
-
     auto component = CatchEvent(renderer, [&](Event event) {
-        if (wait) {
-            game.flipTile(selected);
-            game.flipTile(tmp);
-            wait = false;
-        }
-        process_cursor_control(event);
-        process_selection(event);
+        if (event == Event::Character('z'))
+            game.moveUp();
+        if (event == Event::Character('s'))
+            game.moveDown();
+        if (event == Event::Character('q'))
+            game.moveLeft();
+        if (event == Event::Character('d'))
+            game.moveRight();
+        if (event == Event::Character(' '))
+            game.selectTile();
         if (event == Event::Character('x') || game.isSolved()) {
             screen.ExitLoopClosure()();
             return true;

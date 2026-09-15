@@ -27,6 +27,7 @@ public:
         if (size % 2 != 0)
             throw std::invalid_argument{"board must be even to form pairs"};
 
+        size_ = size;
         size_t area = size * size;
         std::vector<size_t> memory_list(area);
         for (size_t i = 0; i < area; i++)
@@ -45,7 +46,49 @@ public:
         }
     }
 
+    void moveUp() {
+        cursor.x -= 1;
+        cursor.x %= size_;
+    }
+
+    void moveDown() {
+        cursor.x += 1;
+        cursor.x %= size_;
+    }
+
+    void moveLeft() {
+        cursor.y -= 1;
+        cursor.y %= size_;
+    }
+
+    void moveRight() {
+        cursor.y += 1;
+        cursor.y %= size_;
+    }
+
+    void selectTile() {
+        auto tile = board[cursor.x][cursor.y];
+
+        if (selected_tiles.size() == 2) {
+            this->flipTile(selected_tiles.at(0));
+            this->flipTile(selected_tiles.at(1));
+            selected_tiles.clear();
+        }
+        if (tile.isMatched || tile.isFlipped)
+            return;
+        if (selected_tiles.size() == 0) {
+            selected_tiles.push_back(cursor);
+            this->flipTile(cursor);
+        } else if (selected_tiles.size() == 1) {
+            selected_tiles.push_back(cursor);
+            this->flipTile(cursor);
+            this->matchTiles(selected_tiles.at(0), selected_tiles.at(1));
+        }
+    }
+
     const Board &getBoard() { return board; }
+
+    const Coords &getCursor() { return cursor; }
 
     const Tile &getTile(uint x, uint y) { return board.at(x).at(y); }
 
@@ -74,7 +117,10 @@ public:
     }
 
 private:
+    uint size_;
     Board board{};
+    Coords cursor{0, 0};
+    std::vector<Coords> selected_tiles;
 };
 } // namespace mg
 
