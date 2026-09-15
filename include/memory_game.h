@@ -9,6 +9,7 @@ struct Tile {
     size_t value;
     bool isMatched;
     bool isFlipped;
+    std::pair<uint, uint> coords;
 };
 
 using Board = std::vector<std::vector<Tile>>;
@@ -33,7 +34,7 @@ public:
         for (uint i = 0; i < size; i++) {
             Board::value_type row;
             for (uint j = 0; j < size; j++) {
-                row.push_back(Tile{ memory_list[index++], false, false });
+                row.push_back(Tile{ memory_list[index++], false, false, {i, j} });
             }
             board.push_back(row);
         }
@@ -43,15 +44,15 @@ public:
 
     const Tile &getTile(uint x, uint y) { return board.at(x).at(y); }
 
-    void flipTile(uint x, uint y) {
-        if (!board.at(x).at(y).isMatched)
-            board.at(x).at(y).isFlipped = !board.at(x).at(y).isFlipped;
+    void flipTile(std::pair<uint, uint> &a) {
+        if (!board.at(a.first).at(a.second).isMatched)
+            board.at(a.first).at(a.second).isFlipped = !board.at(a.first).at(a.second).isFlipped;
     }
 
-    bool matchTiles(uint x1, uint y1, uint x2, uint y2) {
-        if (board.at(x1).at(y1).value == board.at(x2).at(y2).value) {
-            board.at(x1).at(y1).isMatched = true;
-            board.at(x2).at(y2).isMatched = true;
+    bool matchTiles(std::pair<uint, uint> &a, std::pair<uint, uint> &b) {
+        if (board.at(a.first).at(a.second).value == board.at(b.first).at(b.second).value) {
+            board.at(a.first).at(a.second).isMatched = true;
+            board.at(b.first).at(b.second).isMatched = true;
             return true;
         }
         return false;
