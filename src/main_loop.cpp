@@ -2,7 +2,7 @@
 #include <ftxui/ftxui.hpp>
 
 ftxui::Element createElementBoard
-(const mg::Board &board, std::pair<uint, uint> &cursor) {
+(const mg::Board &board, mg::Coords &cursor) {
     using namespace std;
     using namespace mg;
     using namespace ftxui;
@@ -15,7 +15,7 @@ ftxui::Element createElementBoard
                             | size(WIDTH, EQUAL, 9)
                             | size(HEIGHT, EQUAL, 5);
         
-        if (tile.coords == cursor)
+        if (tile.coords.x == cursor.x && tile.coords.y == cursor.y)
             element_tile |= tile.isMatched ? color(Color::Green1):color(Color::Blue1);
         else
             element_tile |= tile.isMatched ? color(Color::Green):color(Color::Blue);
@@ -41,8 +41,8 @@ ftxui::Element createElementBoard
 }
 
 int getSelectAction
-(mg::MemoryGame &game, std::pair<uint, uint> &cursor, bool &has_selected) {
-    auto tile = game.getBoard()[cursor.first][cursor.second];
+(mg::MemoryGame &game, mg::Coords &cursor, bool &has_selected) {
+    auto tile = game.getBoard()[cursor.x][cursor.y];
 
     if (tile.isMatched || tile.isFlipped)
         return 0;
@@ -57,12 +57,12 @@ int getSelectAction
 
 void runGame(uint size) {
     using namespace ftxui;
-    using namespace std;
+    using namespace mg;
 
-    mg::MemoryGame game{size};
-    pair<uint, uint> cursor(0, 0);
-    pair<uint, uint> selected(0, 0);
-    pair<uint, uint> tmp(0, 0);
+    MemoryGame game{size};
+    Coords cursor{0, 0};
+    Coords selected{0, 0};
+    Coords tmp{0, 0};
     bool has_selected = false;
     bool wait = false;
     auto screen = ScreenInteractive::Fullscreen();
@@ -72,20 +72,20 @@ void runGame(uint size) {
 
     auto process_cursor_control = [&](Event event) {
         if (event == Event::Character('z')) {
-            cursor.first -= 1;
-            cursor.first %= size;
+            cursor.x -= 1;
+            cursor.x %= size;
         }
         if (event == Event::Character('s')) {
-            cursor.first += 1;
-            cursor.first %= size;
+            cursor.x += 1;
+            cursor.x %= size;
         }
         if (event == Event::Character('q')) {
-            cursor.second -= 1;
-            cursor.second %= size;
+            cursor.y -= 1;
+            cursor.y %= size;
         }
         if (event == Event::Character('d')) {
-            cursor.second += 1;
-            cursor.second %= size;
+            cursor.y += 1;
+            cursor.y %= size;
         }
     };
 

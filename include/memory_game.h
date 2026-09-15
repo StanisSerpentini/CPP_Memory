@@ -5,11 +5,16 @@
 
 namespace mg {
 
+struct Coords {
+    uint x;
+    uint y;
+};
+
 struct Tile {
     size_t value;
     bool isMatched;
     bool isFlipped;
-    std::pair<uint, uint> coords;
+    Coords coords;
 };
 
 using Board = std::vector<std::vector<Tile>>;
@@ -44,15 +49,15 @@ public:
 
     const Tile &getTile(uint x, uint y) { return board.at(x).at(y); }
 
-    void flipTile(std::pair<uint, uint> &a) {
-        if (!board.at(a.first).at(a.second).isMatched)
-            board.at(a.first).at(a.second).isFlipped = !board.at(a.first).at(a.second).isFlipped;
+    void flipTile(Coords &a) {
+        if (!board.at(a.x).at(a.y).isMatched)
+            board.at(a.x).at(a.y).isFlipped = !board.at(a.x).at(a.y).isFlipped;
     }
 
-    bool matchTiles(std::pair<uint, uint> &a, std::pair<uint, uint> &b) {
-        if (board.at(a.first).at(a.second).value == board.at(b.first).at(b.second).value) {
-            board.at(a.first).at(a.second).isMatched = true;
-            board.at(b.first).at(b.second).isMatched = true;
+    bool matchTiles(Coords &a, Coords &b) {
+        if (board.at(a.x).at(a.y).value == board.at(b.x).at(b.y).value) {
+            board.at(a.x).at(a.y).isMatched = true;
+            board.at(b.x).at(b.y).isMatched = true;
             return true;
         }
         return false;
@@ -69,7 +74,7 @@ public:
     }
 
 private:
-  Board board{};
+    Board board{};
 };
 } // namespace mg
 
